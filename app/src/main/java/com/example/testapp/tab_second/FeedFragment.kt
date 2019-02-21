@@ -56,13 +56,7 @@ class FeedFragment : Fragment() {
             }
 
         })
-        val arr1 = Observable.just(1)
-        Observable.just(5)
-            .concatWith(arr1)
-            .buffer(2)
-            .subscribe {
-                print(it)
-            }
+
     }
 
 
