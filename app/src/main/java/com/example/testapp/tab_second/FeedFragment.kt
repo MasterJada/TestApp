@@ -56,6 +56,13 @@ class FeedFragment : Fragment() {
             }
 
         })
+        val arr1 = Observable.just(1)
+        Observable.just(5)
+            .concatWith(arr1)
+            .buffer(2)
+            .subscribe {
+                print(it)
+            }
     }
 
 
@@ -82,11 +89,15 @@ class FeedFragment : Fragment() {
         newsDisposable =
             client.getEntertainment()
                 .concatWith(client.getEnvironment())
-                .map { it.articleList }
+                .distinctUntilChanged { t1: RSSFeed, t2: RSSFeed ->
+                    return@distinctUntilChanged t1.articleList.containsAll(t2.articleList)
+                }
+                .buffer(2)
+                .map { it[0].articleList + it[1].articleList}
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     handler.post {
-                       newsAdapter.addItems(it)
+                       newsAdapter.items = it
                     }
                 }, {
                     it.printStackTrace()

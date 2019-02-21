@@ -10,7 +10,7 @@ import com.example.testapp.R
 import com.example.testapp.RxBus
 
 class RssAdapter : RecyclerView.Adapter<RssAdapter.RssVH>() {
-    var items: ArrayList<Article> = ArrayList()
+    var items: List<Article> = ArrayList()
         set(value) {
             val r = value.filterNot { field.contains(it) }
             if(r.isNotEmpty()) {
@@ -19,14 +19,6 @@ class RssAdapter : RecyclerView.Adapter<RssAdapter.RssVH>() {
             }
         }
 
-    fun addItems(list: List<Article>){
-        if(items.size >= 40){
-            items.clear()
-        }
-        val r = list.filterNot { items.contains(it) }
-        items.addAll(r)
-        notifyDataSetChanged()
-    }
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RssVH {
         val view = LayoutInflater.from(p0.context).inflate(R.layout.rss_item, p0, false)
         return RssVH(view)
