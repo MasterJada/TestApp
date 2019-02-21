@@ -1,7 +1,6 @@
 package com.example.testapp.adapters
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,17 +10,23 @@ import com.example.testapp.R
 import com.example.testapp.RxBus
 
 class RssAdapter : RecyclerView.Adapter<RssAdapter.RssVH>() {
-    var items: List<Article> = ArrayList()
+    var items: ArrayList<Article> = ArrayList()
         set(value) {
             val r = value.filterNot { field.contains(it) }
-            Log.i("diff", r.joinToString(" "))
             if(r.isNotEmpty()) {
                 field = value
                 notifyDataSetChanged()
             }
-
         }
 
+    fun addItems(list: List<Article>){
+        if(items.size >= 40){
+            items.clear()
+        }
+        val r = list.filterNot { items.contains(it) }
+        items.addAll(r)
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RssVH {
         val view = LayoutInflater.from(p0.context).inflate(R.layout.rss_item, p0, false)
         return RssVH(view)

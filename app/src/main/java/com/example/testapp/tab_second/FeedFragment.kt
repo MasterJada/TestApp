@@ -10,12 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
-import com.example.testapp.Api
-import com.example.testapp.LoadingEnum
+import com.example.testapp.*
 
-import com.example.testapp.R
-import com.example.testapp.RxBus
 import com.example.testapp.adapters.RssAdapter
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -68,7 +66,7 @@ class FeedFragment : Fragment() {
             .subscribeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 handler.post {
-                    businessAdapter.items = it
+                    businessAdapter.items = ArrayList(it)
                 }
             }, {
                 it.printStackTrace()
@@ -80,6 +78,7 @@ class FeedFragment : Fragment() {
                 RxBus.publish(LoadingEnum.LOADING)
             })
 
+
         newsDisposable =
             client.getEntertainment()
                 .concatWith(client.getEnvironment())
@@ -87,7 +86,7 @@ class FeedFragment : Fragment() {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     handler.post {
-                       newsAdapter.items = it
+                       newsAdapter.addItems(it)
                     }
                 }, {
                     it.printStackTrace()
