@@ -13,13 +13,31 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        archivesBaseName = "TestApp $versionCode $versionName"
     }
+
+    signingConfigs {
+        release {
+            def keystore = project.rootProject.file('./cikeystore')
+            if(keystore.exists()){
+                storeFile  keystore
+                storePassword "qwerty"
+                keyAlias "qwerty"
+                keyPassword "qwerty"
+
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
         }
     }
+
     lintOptions {
         abortOnError false
     }
