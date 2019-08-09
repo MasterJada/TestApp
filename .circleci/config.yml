@@ -31,8 +31,8 @@ jobs:
       - run:
           name: Generate APK
           command: |
-          ./gradlew clean app::assembleRelease
-          echo "Hello"
+            ./gradlew clean app::assembleRelease
+            echo "Hello"
       - store_artifacts:
           path: app/build/outputs/apk/
           destination: apks/
