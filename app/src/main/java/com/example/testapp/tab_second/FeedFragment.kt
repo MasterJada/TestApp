@@ -1,118 +1,82 @@
 package com.example.testapp.tab_second
 
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.example.testapp.*
 
 import com.example.testapp.adapters.RssAdapter
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import com.example.testapp.models.Article
+import com.example.testapp.tab_one.FirstTabViewModel
+import com.example.testapp.web_view_activiy.EXTRA_URL
+import com.example.testapp.web_view_activiy.WebActivity
 import kotlinx.android.synthetic.main.fragment_feed.*
 
-class FeedFragment : Fragment() {
-    private val disposable = CompositeDisposable()
-    private var businessDisposable: Disposable? = null
-    private var newsDisposable: Disposable? = null
-
+class FeedFragment : Fragment(){
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        viewModel = ViewModelProviders.of(activity!!)[FeedViewModel::class.java]
+        firstTabVM = ViewModelProviders.of(activity!!)[FirstTabViewModel::class.java]
         return inflater.inflate(R.layout.fragment_feed, container, false)
     }
 
-    private val handler = Handler()
+    lateinit var viewModel: FeedViewModel
+    lateinit var firstTabVM : FirstTabViewModel
+
     private val businessAdapter = RssAdapter()
-    private val newsAdapter = RssAdapter()
+    private val otherNewsAdapter = RssAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handler.post(runnable)
+
+        businessAdapter.setOnClick(::onClick)
+        otherNewsAdapter.setOnClick(::onClick)
+
         rv_feed1.layoutManager = LinearLayoutManager(context)
         rv_feed1.adapter = businessAdapter
+
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
-            override fun onTabReselected(p0: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabUnselected(p0: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabSelected(p0: TabLayout.Tab?) {
-                rv_feed1.adapter =  if(p0?.position == 0) businessAdapter else newsAdapter
+            override fun onTabReselected(p0: TabLayout.Tab?) = Unit
+            override fun onTabUnselected(p0: TabLayout.Tab?) = Unit
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    rv_feed1.adapter = if (tab.position == 0)
+                        businessAdapter
+                    else
+                        otherNewsAdapter
+                }
             }
 
         })
 
+        viewModel.businessArticles.observe(viewLifecycleOwner, Observer {
+            businessAdapter.items = it
+        })
+        viewModel.otherArticles.observe(viewLifecycleOwner, Observer {
+            otherNewsAdapter.items = it
+        })
     }
 
+    private fun onClick(article: Article){
+        firstTabVM.selectedItem.postValue(article)
 
-    private fun updateInfo() {
-        val client = Api.getClient()
-        businessDisposable = client.getBusinessNews()
-            .map { it.articleList }
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                handler.post {
-                    businessAdapter.items = ArrayList(it)
-                }
-            }, {
-                it.printStackTrace()
-
-            }, {
-                businessDisposable?.dispose()
-                RxBus.publish(LoadingEnum.STOP_LOAD)
-            }, {
-                RxBus.publish(LoadingEnum.LOADING)
-            })
-
-
-        newsDisposable =
-            client.getEntertainment()
-                .concatWith(client.getEnvironment())
-                .distinctUntilChanged { t1: RSSFeed, t2: RSSFeed ->
-                    return@distinctUntilChanged t1.articleList.containsAll(t2.articleList)
-                }
-                .buffer(2)
-                .map { it[0].articleList + it[1].articleList}
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    handler.post {
-                       newsAdapter.items = it
-                    }
-                }, {
-                    it.printStackTrace()
-                }, {
-                    businessDisposable?.dispose()
-                    RxBus.publish(LoadingEnum.STOP_LOAD)
-                }, {
-                    RxBus.publish(LoadingEnum.LOADING)
-                })
-
-        handler.postDelayed(runnable, 5000)
-    }
-
-
-    private var runnable = {
-        updateInfo()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        handler.removeCallbacksAndMessages(null)
+        Intent(activity, WebActivity::class.java).apply {
+            putExtra(EXTRA_URL, article.link)
+            if(this.resolveActivity(activity?.packageManager) != null){
+                startActivity(this)
+            }
+        }
     }
 
 }

@@ -1,14 +1,14 @@
 package com.example.testapp.adapters
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import com.example.testapp.tab_one.BlankFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import com.example.testapp.tab_one.FirstTabFragment
 import com.example.testapp.tab_second.FeedFragment
 
 class MainFragmentAdapter(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     override fun getItem(p0: Int): Fragment {
-        return  if(p0 == 0) BlankFragment.instance
+        return  if(p0 == 0) FirstTabFragment.instance
         else FeedFragment()
     }
 

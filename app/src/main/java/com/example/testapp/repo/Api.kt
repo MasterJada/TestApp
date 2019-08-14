@@ -1,10 +1,10 @@
-package com.example.testapp
+package com.example.testapp.repo
 
+import com.example.testapp.models.RSSFeed
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.jaxb.JaxbConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import retrofit2.create
@@ -23,7 +23,6 @@ interface Api {
         fun getClient() : Api {
             val builder = Retrofit.Builder()
                 .baseUrl("http://feeds.reuters.com/reuters/")
-               // .baseUrl("http://vogella.com/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(SimpleXmlConverterFactory.create())

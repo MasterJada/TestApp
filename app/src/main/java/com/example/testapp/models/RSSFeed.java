@@ -1,4 +1,4 @@
-package com.example.testapp;
+package com.example.testapp.models;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;

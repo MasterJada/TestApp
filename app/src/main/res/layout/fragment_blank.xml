@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  xmlns:tools="http://schemas.android.com/tools"
-			  android:layout_width="match_parent"
-			  android:layout_height="match_parent"
-			  android:orientation="vertical"
-			  tools:context=".tab_one.BlankFragment"
-			  android:gravity="center">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 	
-	<TextView android:layout_width="wrap_content"
-			  android:layout_height="wrap_content"
-			  android:textSize="32sp"
-			  android:text="Oleg Reksha"/>
-	<TextView
-			android:id="@+id/tv_date"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
-	<TextView
-			android:id="@+id/et_empty_label"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="30dp"
-			android:layout_marginEnd="30dp" />
-
-</LinearLayout>
+	<data>
+		
+		<variable
+				name="viewModel"
+				type="com.example.testapp.tab_one.FirstTabViewModel"/>
+	</data>
+	
+	<LinearLayout
+			xmlns:tools="http://schemas.android.com/tools"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			tools:context=".tab_one.FirstTabFragment"
+			android:gravity="center">
+		
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="32sp"
+				android:text="@string/my_name"/>
+		
+		<TextView
+				android:id="@+id/tv_date"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@{viewModel.date}"/>
+		
+		<TextView
+				android:id="@+id/et_empty_label"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="30dp"
+				android:layout_marginEnd="30dp"
+				android:textAlignment="center"
+				android:text="@{viewModel.selectedItem.title}"/>
+	
+	</LinearLayout>
+</layout>

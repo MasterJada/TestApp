@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,7 +7,7 @@
 		android:layout_height="match_parent"
 		tools:context=".tab_second.FeedFragment">
 	
-	<android.support.v7.widget.RecyclerView
+	<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/rv_feed1"
 			android:layout_width="0dp"
 			android:layout_height="0dp"
@@ -18,7 +18,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/tabs"
 			android:background="@drawable/tab_bg"/>
 	
-	<android.support.design.widget.TabLayout
+	<com.google.android.material.tabs.TabLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			app:layout_constraintStart_toStartOf="parent"
@@ -35,18 +35,18 @@
 			app:tabBackground="@drawable/tab_bg"
 			android:background="@drawable/tabs_item">
 		
-		<android.support.design.widget.TabItem
+		<com.google.android.material.tabs.TabItem
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Business news"
+				android:text="@string/business_news"
 				android:id="@+id/tab_business"/>
 		
-		<android.support.design.widget.TabItem
+		<com.google.android.material.tabs.TabItem
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Others news"
+				android:text="@string/others_news"
 				android:id="@+id/tab_news"/>
 	
-	</android.support.design.widget.TabLayout>
+	</com.google.android.material.tabs.TabLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,4 +3,7 @@
 	
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="my_name">Oleg Reksha</string>
+	<string name="business_news">Business news</string>
+	<string name="others_news">Others news</string>
 </resources>
