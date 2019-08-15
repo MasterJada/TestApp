@@ -38,4 +38,4 @@ jobs:
           destination: apks/
       - run:
           name: Generate URL
-          command: curl -d "url=https://circleci.com/api/v1.1/project/github/$CIRCLE_USERNAME/TestApp/$CIRCLE_BUILD_NUM/artifacts?circle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d&token=5d550b34eb455c7f90746f06" -X POST https://olegscdbot.herokuapp.com/deploy
+          command: curl -d "url=https://circleci.com/api/v1.1/project/github/$CIRCLE_USERNAME/$CIRCLE_PROJECT_USERNAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=7971292077885be4d63a38abd0d79eef2b8d0d8d&token=5d550b34eb455c7f90746f06" -X POST https://olegscdbot.herokuapp.com/deploy
