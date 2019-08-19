@@ -7,6 +7,7 @@ import kotlin.concurrent.timerTask
 object Repository {
     private  var timer : Timer? = null
     private var seconds = 0
+
     fun start() {
         timer = Timer()
         timer?.schedule(timerTask {

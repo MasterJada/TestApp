@@ -17,6 +17,7 @@ open class BussinessLiveData: LiveData<List<Article>>() {
             .observeOn(Schedulers.io())
             .subscribeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { Repository.isLoading.postValue(true) }
+            .doOnError { Repository.isLoading.postValue(false) }
             .doOnComplete {
                 compositeDisposable.clear()
                 Repository.isLoading.postValue(false)
