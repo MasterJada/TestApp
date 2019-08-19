@@ -12,7 +12,6 @@ import retrofit2.http.GET
 
 interface Api {
     @GET("businessnews?format=json")
-   // @GET("article.rss")
     fun getBusinessNews(): Observable<RSSFeed>
     @GET("entertainment")
     fun getEntertainment(): Observable<RSSFeed>
