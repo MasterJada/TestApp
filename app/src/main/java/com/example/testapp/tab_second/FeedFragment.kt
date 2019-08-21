@@ -20,7 +20,7 @@ import com.example.testapp.web_view_activiy.EXTRA_URL
 import com.example.testapp.web_view_activiy.WebActivity
 import kotlinx.android.synthetic.main.fragment_feed.*
 
-class FeedFragment : Fragment(){
+class FeedFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +32,7 @@ class FeedFragment : Fragment(){
     }
 
     lateinit var viewModel: FeedViewModel
-    lateinit var firstTabVM : FirstTabViewModel
+    lateinit var firstTabVM: FirstTabViewModel
 
     private val businessAdapter = RssAdapter()
     private val otherNewsAdapter = RssAdapter()
@@ -46,15 +46,16 @@ class FeedFragment : Fragment(){
         rv_feed1.layoutManager = LinearLayoutManager(context)
         rv_feed1.adapter = businessAdapter
 
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab?) = Unit
             override fun onTabUnselected(p0: TabLayout.Tab?) = Unit
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
-                    rv_feed1.adapter = if (tab.position == 0)
+                    rv_feed1.adapter = if (tab.position == 0) {
                         businessAdapter
-                    else
+                    } else {
                         otherNewsAdapter
+                    }
                 }
             }
 
@@ -68,12 +69,12 @@ class FeedFragment : Fragment(){
         })
     }
 
-    private fun onClick(article: Article){
+    private fun onClick(article: Article) {
         firstTabVM.selectedItem.postValue(article)
 
         Intent(activity, WebActivity::class.java).apply {
             putExtra(EXTRA_URL, article.link)
-            if(this.resolveActivity(activity?.packageManager) != null){
+            if (this.resolveActivity(activity?.packageManager) != null) {
                 startActivity(this)
             }
         }
