@@ -60,6 +60,9 @@ class FeedFragment : Fragment() {
         viewModel.otherArticles.observe(viewLifecycleOwner){
             otherNewsAdapter.items = it
         }
+        viewModel.isInternet.observe(viewLifecycleOwner){
+            no_internet.visibility = if(it) View.GONE else View.VISIBLE
+        }
     }
 
     private fun onClick(article: Article) {

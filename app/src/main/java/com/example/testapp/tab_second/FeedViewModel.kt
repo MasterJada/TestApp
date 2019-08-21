@@ -11,4 +11,5 @@ import com.example.testapp.repo.Repository
 class FeedViewModel: ViewModel() {
     val businessArticles: LiveData<List<Article>> by lazy {   Repository.businessItems }
     val otherArticles: LiveData<List<Article>> by lazy {   Repository.otherNews }
+    val isInternet: LiveData<Boolean> by lazy { Repository.networkState }
 }

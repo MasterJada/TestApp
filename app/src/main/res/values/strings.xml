@@ -6,4 +6,5 @@
 	<string name="my_name">Oleg Reksha</string>
 	<string name="business_news">Business news</string>
 	<string name="others_news">Others news</string>
+	<string name="no_internet">No internet</string>
 </resources>

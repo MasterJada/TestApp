@@ -6,30 +6,37 @@ import kotlin.concurrent.timerTask
 import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import com.example.testapp.App
+import com.example.testapp.plusAssign
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import java.util.concurrent.TimeUnit
 
 
 object Repository {
-    private  var timer : Timer? = null
-    private var seconds = 0
+    private val compositeDisposable = CompositeDisposable()
 
     fun start() {
-        timer = Timer()
-        timer?.schedule(timerTask {
-            mutableTime.postValue(Date().time)
-            if(seconds % 5 == 0){
+
+
+        compositeDisposable += Observable.interval(1, TimeUnit.SECONDS)
+            .subscribe {
+                mutableTime.postValue(Date().time)
+            }
+
+        compositeDisposable += Observable.interval(5, TimeUnit.SECONDS)
+            .subscribe {
                 loadDataFromWeb()
             }
 
-            if(seconds % 30 == 0){
+        compositeDisposable += Observable.interval(30, TimeUnit.SECONDS)
+            .subscribe {
                 isConnected()
             }
-            seconds++
-        }, 0, 1000)
     }
 
     fun stop() {
-        timer?.cancel()
-        timer = null
+
+        compositeDisposable.clear()
     }
 
     private fun loadDataFromWeb() {
