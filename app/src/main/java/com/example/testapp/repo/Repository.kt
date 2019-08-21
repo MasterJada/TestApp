@@ -3,6 +3,10 @@ package com.example.testapp.repo
 import androidx.lifecycle.MutableLiveData
 import java.util.*
 import kotlin.concurrent.timerTask
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.net.ConnectivityManager
+import com.example.testapp.App
+
 
 object Repository {
     private  var timer : Timer? = null
@@ -14,6 +18,10 @@ object Repository {
             mutableTime.postValue(Date().time)
             if(seconds % 5 == 0){
                 loadDataFromWeb()
+            }
+
+            if(seconds % 30 == 0){
+                isConnected()
             }
             seconds++
         }, 0, 1000)
@@ -35,5 +43,12 @@ object Repository {
     val businessItems = BussinessLiveData()
     val otherNews = OtherLiveData()
 
+    val networkState = MutableLiveData<Boolean>()
 
+
+    private fun isConnected() {
+        val connectivityManager = App.instance.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        networkState.postValue(networkInfo != null && networkInfo.isConnected)
+    }
 }

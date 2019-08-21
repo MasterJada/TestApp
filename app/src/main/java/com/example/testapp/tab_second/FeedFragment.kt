@@ -46,27 +46,20 @@ class FeedFragment : Fragment() {
         rv_feed1.layoutManager = LinearLayoutManager(context)
         rv_feed1.adapter = businessAdapter
 
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(p0: TabLayout.Tab?) = Unit
-            override fun onTabUnselected(p0: TabLayout.Tab?) = Unit
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    rv_feed1.adapter = if (tab.position == 0) {
-                        businessAdapter
-                    } else {
-                        otherNewsAdapter
-                    }
-                }
+        tabs.addOnTabSelectedListener(createTabListener {
+            rv_feed1.adapter = if (it.position == 0) {
+                businessAdapter
+            } else {
+                otherNewsAdapter
             }
-
         })
 
-        viewModel.businessArticles.observe(viewLifecycleOwner, Observer {
+        viewModel.businessArticles.observe(viewLifecycleOwner) {
             businessAdapter.items = it
-        })
-        viewModel.otherArticles.observe(viewLifecycleOwner, Observer {
+        }
+        viewModel.otherArticles.observe(viewLifecycleOwner){
             otherNewsAdapter.items = it
-        })
+        }
     }
 
     private fun onClick(article: Article) {
@@ -74,7 +67,7 @@ class FeedFragment : Fragment() {
 
         Intent(activity, WebActivity::class.java).apply {
             putExtra(EXTRA_URL, article.link)
-            if (this.resolveActivity(activity?.packageManager) != null) {
+            if (this.resolveActivity(activity?.packageManager ?: return) != null) {
                 startActivity(this)
             }
         }
